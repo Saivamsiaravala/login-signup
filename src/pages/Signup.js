@@ -28,7 +28,7 @@ const Signup = () => {
     if (!regex.test(newPassword)) {
       toast.error(
         "Password should have 1 UpperCase, 1 Numerical and 1 special character and min length of 8",
-        { toastId: "passwordError", autoClose: 2000 }
+        { toastId: "passwordError", autoClose: false }
       );
     } else {
       toast.dismiss("passwordError");
