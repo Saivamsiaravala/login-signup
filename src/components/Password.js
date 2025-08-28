@@ -1,10 +1,12 @@
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import PropTypes from "prop-types";
 
 const Password = ({
   showPassword,
   password,
   handleInput,
   handlePasswordVisibility,
+  id,
 }) => {
   return (
     <div className="pwd">
@@ -14,7 +16,7 @@ const Password = ({
         onChange={handleInput}
         value={password}
         required
-        id="password"
+        id={id}
         title="Please fill the password"
       />
       <button
@@ -25,6 +27,14 @@ const Password = ({
       </button>
     </div>
   );
+};
+
+Password.propTypes = {
+  showPassword: PropTypes.bool.isRequired,
+  password: PropTypes.string.isRequired,
+  handleInput: PropTypes.func.isRequired,
+  handlePasswordVisibility: PropTypes.func.isRequired,
+  id: PropTypes.string,
 };
 
 export default Password;

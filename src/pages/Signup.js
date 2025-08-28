@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Password from "../components/Password";
 import { toast } from "react-toastify";
 
@@ -13,6 +13,7 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showMatchingPassword, setShowMatchingPassword] = useState(false);
 
+  const navigate = useNavigate();
   const usernameHandler = (e) => {
     e.preventDefault();
     const newUserName = e.target.value.replace(/\s/g, "");
@@ -22,7 +23,6 @@ const Signup = () => {
   const passwordHandler = (e) => {
     e.preventDefault();
     const newPassword = e.target.value.replace(/\s/g, "");
-    console.log(newPassword);
     const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
     setPassword(newPassword);
     if (!regex.test(newPassword)) {
@@ -72,13 +72,26 @@ const Signup = () => {
     const updatedPhone = e.target.value.replace(/\D/g, "");
     setPhone(updatedPhone);
   };
+  const submitHandler = (e) => {
+    e.preventDefault();
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+
+    if (!regex.test(password)) {
+      toast.error("Password criterial is not met, Please try again");
+    } else if (password !== matchingPassword) {
+      toast.error("Passwords do not match");
+    } else {
+      toast.success("New Account created");
+      navigate("/");
+    }
+  };
   return (
     <div className="signup">
       <header>
         <h1>Create New Account</h1>
       </header>
       <div className="form-signup-div">
-        <form className="form" id="signin">
+        <form className="form" id="signin" onSubmit={submitHandler}>
           <div className="name">
             <label htmlFor="name">NAME</label>
             <input
@@ -106,11 +119,10 @@ const Signup = () => {
           <div className="email">
             <label htmlFor="email">EMAIL</label>
             <input
-              type="mail"
+              type="email"
               required
               id="email"
               value={email}
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
               title="Please fill out your email"
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -127,9 +139,6 @@ const Signup = () => {
                   name="countryCode"
                   required
                   title="Please fill out your country code"
-
-                  // value={countryCode}
-                  // onChange={handleCountryCodeChange}
                 >
                   <option value="+1">USA +1 </option>
                   <option value="+44">UK +44</option>
@@ -155,21 +164,23 @@ const Signup = () => {
           </div>
 
           <div className="pwd1">
-            <label htmlFor="password">SET PASSWORD</label>
+            <label htmlFor="pwd1">SET PASSWORD</label>
             <Password
               password={password}
               showPassword={showPassword}
               handleInput={passwordHandler}
               handlePasswordVisibility={handlePasswordVisibility}
+              id="pwd1"
             />{" "}
           </div>
           <div className="pwd2">
-            <label htmlFor="password">CONFIRM NEW PASSWORD</label>
+            <label htmlFor="pwd2">CONFIRM NEW PASSWORD</label>
             <Password
               password={matchingPassword}
               showPassword={showMatchingPassword}
               handleInput={matchingPasswordHandler}
               handlePasswordVisibility={handleMatchingPasswordVisibility}
+              id="pwd2"
             />{" "}
           </div>
         </form>
